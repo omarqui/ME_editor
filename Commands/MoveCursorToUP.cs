@@ -4,6 +4,10 @@ namespace ConsoleTest
 {
     class MoveCursorToUP : TextEditorCommand
     {
+        public MoveCursorToUP(TextEditor textEditor) : base(textEditor)
+        {
+        }
+
         public override void Execute()
         {
             _textEditor?.MoveCursorToUP();

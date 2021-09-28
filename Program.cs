@@ -6,16 +6,21 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            KeyboardListener[] keyboardListeners = {
-                new GeneralKeyboardListener(ConsoleKey.UpArrow, new MoveCursorToUP()),
-                new GeneralKeyboardListener(ConsoleKey.DownArrow, new MoveCursorToDown()),
-                new GeneralKeyboardListener(ConsoleKey.LeftArrow, new MoveCursorToLeft()),
-                new GeneralKeyboardListener(ConsoleKey.RightArrow, new MoveCursorToRight()),
-                new GeneralKeyboardListener(ConsoleKey.I, new PrintInfoCursor())
-            };
-
-            TextEditor textEditor = new FirtEditionTextEditor(keyboardListeners);
+            TextEditor textEditor = new FirtEditionTextEditor();
+            KeyboardListener[] keyboardListeners = GetKeyboardListeners(textEditor);
+            textEditor.setKeyboardListeners(keyboardListeners);
             textEditor.Startup();
+        }
+
+        private static KeyboardListener[] GetKeyboardListeners(TextEditor textEditor)
+        {
+            return new KeyboardListener[]{
+                new GeneralKeyboardListener(ConsoleKey.UpArrow, new MoveCursorToUP(textEditor)),
+                new GeneralKeyboardListener(ConsoleKey.DownArrow, new MoveCursorToDown(textEditor)),
+                new GeneralKeyboardListener(ConsoleKey.LeftArrow, new MoveCursorToLeft(textEditor)),
+                new GeneralKeyboardListener(ConsoleKey.RightArrow, new MoveCursorToRight(textEditor)),
+                // new GeneralKeyboardListener(ConsoleKey.I, new PrintInfoCursor()),                
+            };
         }
     }
 

@@ -4,6 +4,10 @@ namespace ConsoleTest
 {
     class MoveCursorToRight : TextEditorCommand
     {
+        public MoveCursorToRight(TextEditor textEditor) : base(textEditor)
+        {
+        }
+
         public override void Execute()
         {
             _textEditor.MoveCursorToRight();

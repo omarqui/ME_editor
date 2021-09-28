@@ -6,10 +6,11 @@ namespace ConsoleTest
 {
     class FirtEditionTextEditor : TextEditor
     {
+        const int INITIAL_LINE_POSITION = 0;
         Dictionary<int, string> lines;
         CursorPosition cursorPosition;
 
-        public FirtEditionTextEditor(KeyboardListener[] listeners) : base(listeners)
+        public FirtEditionTextEditor()
         {
             lines = new Dictionary<int, string>();
             cursorPosition = new CursorPosition();
@@ -31,12 +32,12 @@ namespace ConsoleTest
 
                 if (wasHandled) continue;
 
-                cursorPosition.Left++;
-                string currentLine = GetCurrentLineValue();                
+                string currentLine = GetCurrentLineValue();
                 builder.Clear();
                 builder.Append(currentLine);
                 builder.Append(keyRead.KeyChar);
                 InsertLine(builder.ToString());
+                cursorPosition.Left++;
                 // Render();
                 RenderCurrentLine();
             }
@@ -73,7 +74,7 @@ namespace ConsoleTest
             foreach (var line in lines)
             {
                 Console.CursorTop = line.Key;
-                Console.CursorLeft = 0;
+                Console.CursorLeft = INITIAL_LINE_POSITION;
                 cursorPosition.Top = line.Key;
                 Console.Write(line.Value);
             }
@@ -85,10 +86,17 @@ namespace ConsoleTest
         private void RenderCurrentLine()
         {
             CursorPosition previousCursor = (CursorPosition)cursorPosition.Clone();
-            Console.CursorLeft = 0;            
+            ClearLine(cursorPosition.Top);
             Console.Write(lines.GetValueOrDefault(cursorPosition.Top));            
             cursorPosition = previousCursor;
             Console.CursorLeft = cursorPosition.Left;
+        }
+
+        private void ClearLine(int top)
+        {
+            Console.CursorLeft = INITIAL_LINE_POSITION;
+            Console.Write(Space(Console.BufferWidth));
+            Console.CursorTop--;
         }
 
         public override void MoveCursorToDown()
@@ -98,6 +106,7 @@ namespace ConsoleTest
 
         public override void MoveCursorToLeft()
         {
+            if (cursorPosition.Left == INITIAL_LINE_POSITION) return;
             cursorPosition.Left--;
         }
 
@@ -108,6 +117,7 @@ namespace ConsoleTest
 
         public override void MoveCursorToUP()
         {
+            if (cursorPosition.Top == INITIAL_LINE_POSITION) return;
             cursorPosition.Top--;
         }
 
@@ -116,7 +126,7 @@ namespace ConsoleTest
             Console.Clear();
             lines.Add(3, "Hola mundo");
             Render();
-            Read(keyboardListeners);
+            Read(_keyboardListeners);
         }
     }
 }

@@ -19,10 +19,5 @@ namespace ConsoleTest
             _command.Execute();
             return true;
         }
-
-        public void setTextEditor(TextEditor textEditor)
-        {
-            _command.setTextEditor(textEditor);
-        }
     }
 }

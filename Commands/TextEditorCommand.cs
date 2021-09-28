@@ -3,11 +3,12 @@ namespace ConsoleTest
     abstract class TextEditorCommand
     {
         protected TextEditor _textEditor;
-        public abstract void Execute();
 
-        public void setTextEditor(TextEditor textEditor)
+        protected TextEditorCommand(TextEditor textEditor)
         {
             _textEditor = textEditor;
         }
+
+        public abstract void Execute();        
     }
 }
