@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ConsoleTest
@@ -55,7 +56,7 @@ namespace ConsoleTest
         {
             if (lines.ContainsKey(cursorPosition.Top))
                 lines[cursorPosition.Top] = lineValue;
-            else 
+            else
                 lines.Add(cursorPosition.Top, lineValue);
         }
 
@@ -86,14 +87,20 @@ namespace ConsoleTest
         private void RenderCurrentLine()
         {
             CursorPosition previousCursor = (CursorPosition)cursorPosition.Clone();
-            ClearLine(cursorPosition.Top);
-            Console.Write(lines.GetValueOrDefault(cursorPosition.Top));            
+            RenderLine(cursorPosition.Top);
             cursorPosition = previousCursor;
             Console.CursorLeft = cursorPosition.Left;
         }
 
+        private void RenderLine(int top)
+        {
+            ClearLine(top);
+            Console.Write(lines.GetValueOrDefault(top));
+        }
+
         private void ClearLine(int top)
         {
+            Console.CursorTop = top;
             Console.CursorLeft = INITIAL_LINE_POSITION;
             Console.Write(Space(Console.BufferWidth));
             Console.CursorTop--;
@@ -134,14 +141,44 @@ namespace ConsoleTest
             string currentLine = GetCurrentLineValue();
             int startIndex = cursorPosition.Left - 1;
 
-            if (currentLine == null || currentLine == String.Empty) return;            
+            if (currentLine == null || currentLine == String.Empty) return;
             if (currentLine.Length <= startIndex) return;
             if (startIndex < 0) return;
-            
-            StringBuilder builder = new StringBuilder(currentLine);            
+
+            StringBuilder builder = new StringBuilder(currentLine);
             builder.Remove(startIndex, 1);
             InsertLine(builder.ToString());
             RenderCurrentLine();
+        }
+
+        public override void InsertLine()
+        {
+            var downLines = lines.Where(l => l.Key >= cursorPosition.Top)
+                .OrderByDescending(l => l.Key)
+                .ToList();
+
+            downLines.ForEach(l =>
+                {
+                    lines.Remove(l.Key);
+                    lines.Add(l.Key + 1, l.Value);
+                });
+
+            RenderDownLines(downLines.Select(l=>l.Key+1).ToArray());
+        }        
+
+        private void RenderDownLines(int[] lineKeys)
+        {
+            CursorPosition previousCursor = (CursorPosition)cursorPosition.Clone();
+            foreach (var line in lineKeys)
+            {
+                ClearLine(line-1);
+                Console.CursorTop = line;
+                RenderLine(line);    
+            }
+            
+            cursorPosition = previousCursor;
+            Console.CursorTop = cursorPosition.Top;
+            Console.CursorLeft = 0;
         }
     }
 }

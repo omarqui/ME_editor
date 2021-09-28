@@ -13,6 +13,8 @@ namespace ConsoleTest
 
         public abstract void MoveCursorToUP();
 
+        public abstract void InsertLine();
+
         public abstract void MoveCursorToRight();
 
         public abstract void MoveCursorToLeft();
