@@ -15,12 +15,13 @@ namespace ConsoleTest
         private static KeyboardListener[] GetKeyboardListeners(TextEditor textEditor)
         {
             return new KeyboardListener[]{
-                new GeneralKeyboardListener(ConsoleKey.UpArrow, new MoveCursorToUP(textEditor)),
-                new GeneralKeyboardListener(ConsoleKey.DownArrow, new MoveCursorToDown(textEditor)),
-                new GeneralKeyboardListener(ConsoleKey.LeftArrow, new MoveCursorToLeft(textEditor)),
-                new GeneralKeyboardListener(ConsoleKey.RightArrow, new MoveCursorToRight(textEditor)),
+                new GeneralKeyboardListener(new MoveCursorToUP(textEditor), ConsoleKey.UpArrow),
+                new GeneralKeyboardListener(new MoveCursorToDown(textEditor), ConsoleKey.DownArrow),
+                new GeneralKeyboardListener(new MoveCursorToLeft(textEditor), ConsoleKey.LeftArrow),
+                new GeneralKeyboardListener(new MoveCursorToRight(textEditor), ConsoleKey.RightArrow),
                 // new GeneralKeyboardListener(ConsoleKey.I, new PrintInfoCursor()),
-                new GeneralKeyboardListener(ConsoleKey.Backspace, new Delete(textEditor))
+                new GeneralKeyboardListener(new Delete(textEditor), ConsoleKey.Backspace),
+                new GeneralKeyboardListener(new Enter(textEditor), ConsoleKey.Enter)
             };
         }
     }

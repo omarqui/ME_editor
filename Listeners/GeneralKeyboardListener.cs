@@ -1,21 +1,26 @@
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleTest
 {
     class GeneralKeyboardListener : KeyboardListener
     {
         TextEditorCommand _command;
-        ConsoleKey _key;
+        IEnumerable<ConsoleKey> _keys;
 
-        public GeneralKeyboardListener(ConsoleKey keyToListen, TextEditorCommand command)
+        public GeneralKeyboardListener(TextEditorCommand command, params ConsoleKey[] keysToListen)
         {
             _command = command;
-            _key = keyToListen;
+            _keys = keysToListen;
         }
-        
+
         public bool OnKeyPress(ConsoleKey keyPressed)
         {
-            if (keyPressed != _key) return false;            
+            foreach (var key in _keys)
+            {
+                if (keyPressed != key) return false;
+            }
+            
             _command.Execute();
             return true;
         }
