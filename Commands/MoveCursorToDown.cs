@@ -11,7 +11,7 @@ namespace ConsoleTest
         public override void Execute()
         {
             _textEditor.MoveCursorToDown();
-            if (Console.BufferHeight <= Console.CursorTop+1) return;            
+            if (Console.BufferHeight <= Console.CursorTop+1) return;
             Console.CursorTop++;
         }
     }

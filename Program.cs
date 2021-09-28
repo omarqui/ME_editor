@@ -6,7 +6,7 @@ namespace ConsoleTest
     {
         static void Main(string[] args)
         {
-            TextEditor textEditor = new FirtEditionTextEditor();
+            TextEditor textEditor = new FirtEditionTextEditor(new ConsoleManager());
             KeyboardListener[] keyboardListeners = GetKeyboardListeners(textEditor);
             textEditor.setKeyboardListeners(keyboardListeners);
             textEditor.Startup();
