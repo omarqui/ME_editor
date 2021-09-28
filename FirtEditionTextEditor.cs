@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// TODO Extract Console api depency
+
 namespace ConsoleTest
 {
     class FirtEditionTextEditor : TextEditor
@@ -100,6 +102,7 @@ namespace ConsoleTest
 
         private void ClearLine(int top)
         {
+            // FIXME dont manipulate Console.Cursor without update local CursorPosition
             Console.CursorTop = top;
             Console.CursorLeft = INITIAL_LINE_POSITION;
             Console.Write(Space(Console.BufferWidth));
