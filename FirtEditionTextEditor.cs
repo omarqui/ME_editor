@@ -128,5 +128,20 @@ namespace ConsoleTest
             Render();
             Read(_keyboardListeners);
         }
+
+        public override void Delete()
+        {
+            string currentLine = GetCurrentLineValue();
+            int startIndex = cursorPosition.Left - 1;
+
+            if (currentLine == null || currentLine == String.Empty) return;            
+            if (currentLine.Length <= startIndex) return;
+            if (startIndex < 0) return;
+            
+            StringBuilder builder = new StringBuilder(currentLine);            
+            builder.Remove(startIndex, 1);
+            InsertLine(builder.ToString());
+            RenderCurrentLine();
+        }
     }
 }

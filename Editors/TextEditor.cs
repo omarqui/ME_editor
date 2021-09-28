@@ -5,6 +5,8 @@ namespace ConsoleTest
     abstract class TextEditor {
         protected KeyboardListener[] _keyboardListeners;
 
+        public abstract void Delete();
+
         public abstract void Startup();
 
         public abstract void MoveCursorToDown();
