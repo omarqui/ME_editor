@@ -8,14 +8,14 @@ namespace ConsoleTest
     class FirtEditionTextEditor : TextEditor
     {
         const int INITIAL_LINE_POSITION = 0;
-        Dictionary<int, string> lines;
-        CursorPosition cursorPosition;
+        Dictionary<int, string> _lines;
+        CursorPosition _cursorPosition;
         IConsoleManger _console;
 
         public FirtEditionTextEditor(IConsoleManger console)
         {
-            lines = new Dictionary<int, string>();
-            cursorPosition = new CursorPosition();
+            _lines = new Dictionary<int, string>();
+            _cursorPosition = new CursorPosition();
             _console = console;
         }
 
@@ -40,65 +40,65 @@ namespace ConsoleTest
                 builder.Append(currentLine);
                 builder.Append(keyRead.KeyChar);
                 InsertLine(builder.ToString());
-                cursorPosition.Left++;
+                _cursorPosition.Left++;
                 // Render();
                 _console.RenderLineFromPosition(
-                    cursorPosition, 
-                    lines[cursorPosition.Top], 
+                    _cursorPosition, 
+                    _lines[_cursorPosition.Top], 
                     true);
             }
         }
 
         private string GetCurrentLineValue()
         {
-            if (lines.ContainsKey(cursorPosition.Top))
-                return lines[cursorPosition.Top];
+            if (_lines.ContainsKey(_cursorPosition.Top))
+                return _lines[_cursorPosition.Top];
 
-            return ConsoleManager.Space(cursorPosition.Left);
+            return ConsoleManager.Space(_cursorPosition.Left);
         }
 
         private void InsertLine(string lineValue)
         {
-            if (lines.ContainsKey(cursorPosition.Top))
-                lines[cursorPosition.Top] = lineValue;
+            if (_lines.ContainsKey(_cursorPosition.Top))
+                _lines[_cursorPosition.Top] = lineValue;
             else
-                lines.Add(cursorPosition.Top, lineValue);
+                _lines.Add(_cursorPosition.Top, lineValue);
         }
 
         public override void MoveCursorToDown()
         {
-            cursorPosition.Top++;
+            _cursorPosition.Top++;
         }
 
         public override void MoveCursorToLeft()
         {
-            if (cursorPosition.Left == INITIAL_LINE_POSITION) return;
-            cursorPosition.Left--;
+            if (_cursorPosition.Left == INITIAL_LINE_POSITION) return;
+            _cursorPosition.Left--;
         }
 
         public override void MoveCursorToRight()
         {
-            cursorPosition.Left++;
+            _cursorPosition.Left++;
         }
 
         public override void MoveCursorToUP()
         {
-            if (cursorPosition.Top == INITIAL_LINE_POSITION) return;
-            cursorPosition.Top--;
+            if (_cursorPosition.Top == INITIAL_LINE_POSITION) return;
+            _cursorPosition.Top--;
         }
 
         public override void Startup()
         {
             _console.ClearAll();
-            lines.Add(3, "Hola mundo");
-            _console.RenderAll(cursorPosition, lines);
+            _lines.Add(3, "Hola mundo");
+            _console.RenderAll(_cursorPosition, _lines);
             Read(_keyboardListeners);
         }
 
         public override void Delete()
         {
             string currentLine = GetCurrentLineValue();
-            int startIndex = cursorPosition.Left - 1;
+            int startIndex = _cursorPosition.Left - 1;
 
             if (currentLine == null || currentLine == String.Empty) return;
             if (currentLine.Length <= startIndex) return;
@@ -107,19 +107,19 @@ namespace ConsoleTest
             StringBuilder builder = new StringBuilder(currentLine);
             builder.Remove(startIndex, 1);
             InsertLine(builder.ToString());
-            _console.RenderLineFromPosition(cursorPosition, lines[cursorPosition.Top]);
+            _console.RenderLineFromPosition(_cursorPosition, _lines[_cursorPosition.Top]);
         }
 
         public override void InsertLine()
         {
-            var downLines = lines.Where(l => l.Key >= cursorPosition.Top)
+            var downLines = _lines.Where(l => l.Key >= _cursorPosition.Top)
                 .OrderByDescending(l => l.Key)
                 .ToList();
 
             downLines.ForEach(l =>
                 {
-                    lines.Remove(l.Key);
-                    lines.Add(l.Key + 1, l.Value);
+                    _lines.Remove(l.Key);
+                    _lines.Add(l.Key + 1, l.Value);
                 });
 
             RenderDownLines(downLines.Select(l=>l.Key+1).ToArray());
@@ -127,20 +127,20 @@ namespace ConsoleTest
 
         private void RenderDownLines(int[] lineKeys)
         {
-            CursorPosition previousCursor = (CursorPosition)cursorPosition.Clone();
+            CursorPosition previousCursor = (CursorPosition)_cursorPosition.Clone();
             
             foreach (var line in lineKeys)
             {
-                cursorPosition.Top = line - 1;
-                cursorPosition.Left = 0;
-                _console.ClearLine(cursorPosition);
-                cursorPosition.Top++;
-                _console.RenderLineFromPosition(cursorPosition, lines[line]);    
+                _cursorPosition.Top = line - 1;
+                _cursorPosition.Left = 0;
+                _console.ClearLine(_cursorPosition);
+                _cursorPosition.Top++;
+                _console.RenderLineFromPosition(_cursorPosition, _lines[line]);    
             }
 
-            cursorPosition = previousCursor;
-            cursorPosition.Left = 0;
-            _console.MoveCursorTo(cursorPosition);
+            _cursorPosition = previousCursor;
+            _cursorPosition.Left = 0;
+            _console.MoveCursorTo(_cursorPosition);
         }
     }
 }

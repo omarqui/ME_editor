@@ -19,7 +19,7 @@ namespace ConsoleTest
 
         public abstract void MoveCursorToLeft();
 
-        public void setKeyboardListeners(KeyboardListener[] keyboardListeners)
+        public void SetKeyboardListeners(KeyboardListener[] keyboardListeners)
         {
             _keyboardListeners = keyboardListeners;
         }
