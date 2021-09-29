@@ -11,6 +11,8 @@ namespace ConsoleTest
 
         public abstract void MoveCursorToDown();
 
+        public abstract CursorPosition GetCursorPosition();
+
         public abstract void MoveCursorToUP();
 
         public abstract void InsertLine();
@@ -18,6 +20,8 @@ namespace ConsoleTest
         public abstract void MoveCursorToRight();
 
         public abstract void MoveCursorToLeft();
+
+        public abstract void RemoveLine();
 
         public void SetKeyboardListeners(KeyboardListener[] keyboardListeners)
         {
